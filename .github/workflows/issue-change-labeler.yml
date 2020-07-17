@@ -1,0 +1,22 @@
+name: Issue change labeler
+
+on:
+  issues:
+    types: [edited, labeled, labeled, unlabeled]
+  project_card: 
+    types: [moved, deleted]
+
+jobs:
+  issue-change-labeler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Help wanted']
+            })
