@@ -15,7 +15,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            core.debug(github.event.changes)
+            core.debug(context.payload.changes)
           #script: |
             #github.issues.addLabels({
               #issue_number: context.issue.number,
