@@ -11,15 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v2
-        #if: ${{ github.event.changes.label.name != 'help wanted' }}
+        if: ${{ context.payload.changes.label.name != 'help wanted' }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            core.debug(context.payload.changes)
-          #script: |
-            #github.issues.addLabels({
-              #issue_number: context.issue.number,
-              #owner: context.repo.owner,
-              #repo: context.repo.repo,
-              #labels: ['help wanted']
-            #})
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['help wanted']
+            })
