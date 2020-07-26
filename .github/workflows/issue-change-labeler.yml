@@ -15,15 +15,11 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             try {
-              core.debug(context.eventName);
-              core.debug(context.action);
-              core.debug('${{github.event.action}}');
-            
               if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == 'help wanted') {
-                core.info(`An '${{github.event}}.${{github.event.action}}' event action has been triggered.`);
-              } else {
-                core.info('Skipping since specified label was unlabeled.');
+                core.info('Skipping since the '${{github.event.label.name}}' label was unlabeled.');
                 return;
+              } else {
+                core.info(`An '${{github.event.name}}.${{github.event.action}}' event action has been triggered.`);
               }
 
               var issue_number;
