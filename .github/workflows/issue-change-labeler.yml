@@ -38,3 +38,7 @@ jobs:
             catch (error) {
               core.setFailed(error.message);
             }
+      - uses: actions/github-script@v2
+        with:
+          script: |
+            core.debug('second step')
