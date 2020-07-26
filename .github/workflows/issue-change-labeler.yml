@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v2
-        if: ${{ !(context.payload.action == 'unlabeled' && context.payload.label.name == 'help wanted') }}
+        if: ${{ !(github.event.action == 'unlabeled' && github.event.label.name == 'help wanted') }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
