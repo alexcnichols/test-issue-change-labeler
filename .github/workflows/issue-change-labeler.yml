@@ -9,9 +9,9 @@ on:
 jobs:
   issue-change-labeler:
     runs-on: ubuntu-latest
+    if: ${{ !(github.event.action == 'unlabeled' && github.event.label.name == 'help wanted') }}
     steps:
       - uses: actions/github-script@v2
-        if: ${{ !(github.event.action == 'unlabeled' && github.event.label.name == 'help wanted') }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
