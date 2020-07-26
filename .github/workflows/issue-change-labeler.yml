@@ -19,7 +19,7 @@ jobs:
                 core.info('Skipping since the '${{github.event.label.name}}' label was unlabeled.');
                 return;
               } else {
-                core.info(`An '${{github.event.name}}.${{github.event.action}}' event action has been triggered.`);
+                core.info(`An '${github.context.eventName}.${{github.event.action}}' event action has been triggered.`);
               }
 
               var issue_number;
