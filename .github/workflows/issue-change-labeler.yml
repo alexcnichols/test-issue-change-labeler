@@ -2,7 +2,7 @@ name: Issue change labeler
 
 on:
   issues:
-    types: [edited, labeled, labeled, unlabeled]
+    types: [edited, labeled, unlabeled]
   project_card: 
     types: [moved, deleted]
 
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v2
-        if: ${{ context.payload.changes.label.name != 'help wanted' }}
+        if: ${{ !(context.payload.action == 'unlabeled' && context.payload.label.name == 'help wanted') }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
