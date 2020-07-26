@@ -9,13 +9,17 @@ on:
 jobs:
   issue-change-labeler:
     runs-on: ubuntu-latest
-    if: ${{ !(github.event.action == 'unlabeled' && github.event.label.name == 'help wanted') }}
     steps:
       - uses: actions/github-script@v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             try {
+              if !(github.event.action == 'unlabeled' && github.event.label.name == 'help wanted') {
+                core.info('Skipping since specified label was unlabeled.');
+                return;
+              }
+
               var issue_number;
               if (context.payload.issue !== undefined) {
                 issue_number = context.payload.issue.number;
