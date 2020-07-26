@@ -15,6 +15,9 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             try {
+              core.debug(context.eventName);
+              core.debug(context.action);
+            
               if (github.event.action == 'unlabeled' && github.event.label.name == 'help wanted') {
                 core.info(`A ${ github.event.action } event has been triggered.`);
               } else {
