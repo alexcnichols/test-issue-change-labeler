@@ -15,9 +15,26 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['help wanted']
-            })
+            try {
+              var issue_number;
+              if (context.payload.issue !== undefined) {
+                issue_number = context.payload.issue.number;
+              } else if (
+                context.payload.project_card !== undefined &&
+                context.payload.project_card.content_url
+              ) {
+                issue_number = context.payload.project_card.content_url.split("/").pop();
+              } else {
+                core.setFailed("Unable to determine issue number.");
+                return;
+              }
+              github.issues.addLabels({
+                issue_number: issue_number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['help wanted']
+              });
+            } 
+            catch (error) {
+              core.setFailed(error.message);
+            }
