@@ -50,11 +50,6 @@ jobs:
                 per_page: 100,
               });
               const match = existing_labels.filter(label => qualifying_labels.includes(label.name));
-              //const match = existing_labels.find((existing_label) => {
-              //  return qualifying_labels.find((qualifying_label) => {
-              //    return existing_label.name === qualifying_label;
-              //  });
-              });
               if (!match) {
                 core.info(`Skipping since the '${qualifying_labels.join()}' label(s) are not on the issue.`);
                 return;
