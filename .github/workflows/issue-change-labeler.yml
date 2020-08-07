@@ -50,11 +50,13 @@ jobs:
                 per_page: 100,
               });
               const match = existing_labels.filter(label => qualifying_labels.includes(label.name));
-              if (!match) {
-                core.info(`Skipping since the '${qualifying_labels.join()}' label(s) are not on the issue.`);
-                return;
-              } else {
+              core.info(match);
+              core.info(match.length);
+              if (match.length !== undefined && match.length > 0) {
                 core.info(`One or more of the '${qualifying_labels.join()}' label(s) are on the issue.`);
+              } else {
+                core.info(`Skipping since the '${qualifying_labels.join()}' label(s) are not on the issue.`);
+                return; 
               }
               
               // Apply the label for tracking changes to the issue
