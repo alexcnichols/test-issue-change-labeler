@@ -47,7 +47,7 @@ jobs:
                 repo: context.repo.repo,
                 labels: [label_name]
               });
-              core.info(`The '${{label_name}}' label was applied to issue #'${{issue_number}}'.`);
+              core.info(`The '${label_name}' label was applied to issue #${issue_number}.`);
             } 
             catch (error) {
               core.setFailed(error.message);
