@@ -22,7 +22,10 @@ jobs:
               
               // Check if the label being used to tracked changes was unlabeled and skip if so to avoid a loop
               if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == label_name) {
-                core.info(`Skipping since the '${{github.event.label.name}}' label was unlabeled.`);
+                core.info(`Skipping since the '${{github.event.label.name}}' label was removed.`);
+                return;
+              } else if ('${{github.event.action}}' == 'labeled' && qualifying_labels.find('${{github.event.label.name}}')) {
+                core.info(`Skipping since the '${{github.event.label.name}}' qualifying label was applied.`);
                 return;
               } else {
                 core.info(`A '${{github.event_name}}.${{github.event.action}}' event action has been triggered.`);
