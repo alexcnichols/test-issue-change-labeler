@@ -16,12 +16,11 @@ jobs:
           script: |
             try {
               if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == 'help wanted') {
-                core.info('Skipping since the '${{github.event.label.name}}' label was unlabeled.');
+                core.info(`Skipping since the '${{github.event.label.name}}' label was unlabeled.`);
                 return;
               } else {
-                core.info('An '${{github.event_name}}.${{github.event.action}}' event action has been triggered.');
+                core.info(`An '${{github.event_name}}.${{github.event.action}}' event action has been triggered.`);
               }
-
               var issue_number;
               if (context.payload.issue !== undefined) {
                 issue_number = context.payload.issue.number;
