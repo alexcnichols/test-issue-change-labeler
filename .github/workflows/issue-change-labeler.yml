@@ -15,13 +15,18 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             try {
+              // Define the label to use to track changes
               var label_name = 'help wanted';
+              
+              // Check if the label being used to tracked changes was unlabeled and skip if so to avoid a loop
               if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == label_name) {
                 core.info(`Skipping since the '${{github.event.label.name}}' label was unlabeled.`);
                 return;
               } else {
-                core.info(`An '${{github.event_name}}.${{github.event.action}}' event action has been triggered.`);
+                core.info(`A '${{github.event_name}}.${{github.event.action}}' event action has been triggered.`);
               }
+              
+              // Get the issue number from the issue change or project board card change
               var issue_number;
               if (context.payload.issue !== undefined) {
                 issue_number = context.payload.issue.number;
@@ -34,12 +39,15 @@ jobs:
                 core.setFailed("Unable to determine issue number.");
                 return;
               }
+              
+              // Apply the label for tracking changes to the issue
               github.issues.addLabels({
                 issue_number: issue_number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 labels: [label_name]
               });
+              core.info(`The '${{label_name}}' label was applied to issue #'${{issue_number}}'.`);
             } 
             catch (error) {
               core.setFailed(error.message);
