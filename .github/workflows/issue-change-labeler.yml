@@ -16,7 +16,7 @@ jobs:
           script: |
             try {
               // Define the label to use to track changes
-              var label_name = 'help wanted';
+              var label_name = 'changed';
               
               // Check if the label being used to tracked changes was unlabeled and skip if so to avoid a loop
               if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == label_name) {
