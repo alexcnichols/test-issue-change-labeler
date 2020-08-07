@@ -44,9 +44,9 @@ jobs:
               
               // Check if at least one of the qualifying label(s) are already on the issue
               const existing_labels = github.issues.listLabelsOnIssue({
-                owner,
-                repo,
-                issue_number,
+                issue_number: issue_number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
               });
               const match = existing_labels.find((existing_label) => {
                 return qualifying_labels.find((qualifying_label) => {
