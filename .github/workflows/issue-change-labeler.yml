@@ -10,7 +10,8 @@ jobs:
   issue-change-labeler:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v2
+      - name: Label issue if changed
+        uses: actions/github-script@v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
