@@ -17,7 +17,8 @@ jobs:
           script: |
             try {
               // Define the label to use to track changes
-              var label_name = 'changed';
+              const label_name = 'changed';
+              const qualifying_labels = ['reviewed', 'endorsed'];
               
               // Check if the label being used to tracked changes was unlabeled and skip if so to avoid a loop
               if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == label_name) {
@@ -41,12 +42,30 @@ jobs:
                 return;
               }
               
+              // Check if at least one of the qualifying label(s) are already on the issue
+              const existing_labels = github.issues.listLabelsOnIssue({
+                owner,
+                repo,
+                issue_number,
+              });
+              const match = existing_labels.find((existing_label) => {
+                return qualifying_labels.find((qualifying_label) => {
+                  return existing_label.name === qualifying_label;
+                });
+              });
+              if (!match) {
+                core.info(`Skipping since the '${qualifying_labels.join()}' label(s) are not on the issue.`);
+                return;
+              } else {
+                core.info(`One or more of the '${qualifying_labels.join()}' label(s) are on the issue.`);
+              }
+              
               // Apply the label for tracking changes to the issue
               github.issues.addLabels({
                 issue_number: issue_number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                labels: [label_name]
+                labels: [label_name],
               });
               core.info(`The '${label_name}' label was applied to issue #${issue_number}.`);
             } 
