@@ -24,7 +24,7 @@ jobs:
               if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == label_name) {
                 core.info(`Skipping since the '${{github.event.label.name}}' label was removed.`);
                 return;
-              } else if ('${{github.event.action}}' == 'labeled' && qualifying_labels.find('${{github.event.label.name}}')) {
+              } else if ('${{github.event.action}}' == 'labeled' && qualifying_labels.includes('${{github.event.label.name}}')) {
                 core.info(`Skipping since the '${{github.event.label.name}}' qualifying label was applied.`);
                 return;
               } else {
