@@ -15,4 +15,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           changed-label: 'changed'
-          qualifying-labels: 'reviewed'
+          qualifying-labels: 'reviewed,endorsed'
