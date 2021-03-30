@@ -11,70 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Label issue if changed
-        uses: actions/github-script@v2
+        uses: alexcnichols/issue-change-labeler@main
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            try {
-              // Define the label to use to track changes
-              const labelName = 'changed';
-              const qualifyingLabels = ['reviewed', 'endorsed'];
-              
-              // Check if the label being used to track changes was unlabeled and skip if so to avoid a loop
-              // Also check if the qualifying labels were unlabeled or labeled and skip
-              if ('${{github.event.action}}' == 'unlabeled' && '${{github.event.label.name}}' == labelName) {
-                core.info(`Skipping since the '${{github.event.label.name}}' label was removed.`);
-                return;
-              } else if ('${{github.event.action}}' == 'unlabeled' && qualifyingLabels.includes('${{github.event.label.name}}')) {
-                core.info(`Skipping since the '${{github.event.label.name}}' qualifying label was removed.`);
-                return;
-              } else if ('${{github.event.action}}' == 'labeled' && qualifyingLabels.includes('${{github.event.label.name}}')) {
-                core.info(`Skipping since the '${{github.event.label.name}}' qualifying label was applied.`);
-                return;
-              } else {
-                core.info(`A '${{github.event_name}}.${{github.event.action}}' event action has been triggered.`);
-              }
-              
-              // Get the issue number from the issue change or project board card change
-              var issueNumber;
-              if (context.payload.issue !== undefined) {
-                issueNumber = context.payload.issue.number;
-              } else if (
-                context.payload.project_card !== undefined &&
-                context.payload.project_card.content_url
-              ) {
-                issueNumber = context.payload.project_card.content_url.split("/").pop();
-              } else {
-                core.setFailed("Unable to determine issue number.");
-                return;
-              }
-              
-              // Check if at least one of the qualifying label(s) are already on the issue
-              const { data: existingLabels } = await github.issues.listLabelsOnIssue({
-                issue_number: issueNumber,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                per_page: 100,
-              });
-              const match = existingLabels.filter(label => qualifyingLabels.includes(label.name));
-              core.info(match);
-              core.info(match.length);
-              if (match.length !== undefined && match.length > 0) {
-                core.info(`One or more of the '${qualifyingLabels.join()}' label(s) are on the issue.`);
-              } else {
-                core.info(`Skipping since the '${qualifyingLabels.join()}' label(s) are not on the issue.`);
-                return; 
-              }
-              
-              // Apply the label for tracking changes to the issue
-              await github.issues.addLabels({
-                issue_number: issueNumber,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                labels: [labelName],
-              });
-              core.info(`The '${labelName}' label was applied to issue #${issueNumber}.`);
-            } 
-            catch (error) {
-              core.setFailed(error.message);
-            }
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          changed-label: 'changed'
+          qualifying-labels: 'reviewed'
