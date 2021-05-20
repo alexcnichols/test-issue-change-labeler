@@ -2,7 +2,7 @@ name: Issue change labeler
 
 on:
   issues:
-    types: [edited, labeled, unlabeled]
+    types: [edited, labeled, unlabeled, locked]
   project_card: 
     types: [moved, deleted]
 
